@@ -8,8 +8,9 @@
 const std::string charset {
         "abcdefghijklmnopqrstuvwxyz"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "0123456789" };
-const int string_length = 12;
+        "0123456789"
+    };
+const int string_length { 12 };
 
 std::string generateRandomUID() {
     std::string result {};
@@ -22,8 +23,6 @@ std::string generateRandomUID() {
     for (int i = 0; i < string_length; i++) {
         result[i] = charset[int_distribution(random_number_generator)];
     }
-
-    std::cout << "random uid: " << result << '\n';
 
     return result;
 }
@@ -46,7 +45,7 @@ void handleFile(struct dirent* ent) {
     }
 
     std::filesystem::path temp_file_path { filePath.string() + ".tmp" };
-    std::ofstream output_file_stream(temp_file_path);
+    std::ofstream output_file_stream { temp_file_path };
 
     if (!output_file_stream.is_open()) {
         return;
@@ -93,9 +92,13 @@ int main() {
         return -1;
     }
 
+    std::cout << "Randomizing UIDs of all godot resources in current directory...\n";
+
     while ((ent = readdir(directory)) != NULL) {
         handleFile(ent);
     }
+
+    std::cout << "Done!\n";
 
     closedir(directory);
 
