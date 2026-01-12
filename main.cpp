@@ -18,7 +18,7 @@ std::string generateRandomUID() {
 
     std::random_device random_device { };
     std::mt19937 random_number_generator { random_device() };
-    std::uniform_int_distribution<int> int_distribution { 0, static_cast<int>(charset.length()) };
+    std::uniform_int_distribution<int> int_distribution { 0, static_cast<int>(charset.length() - 1) };
 
     for (int i = 0; i < string_length; i++) {
         result[i] = charset[int_distribution(random_number_generator)];
