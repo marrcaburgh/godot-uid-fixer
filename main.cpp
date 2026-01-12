@@ -63,13 +63,7 @@ void handleFile(struct dirent* ent) {
         }
 
         uid_position += 6;
-        std::string uid {};
-        uid.resize(string_length);
-
-        for (int i = 0; i < string_length; i++) {
-            uid[i] = line[uid_position + i];
-        }
-
+        
         std::cout << "line: " << line << '\n';
         line.replace(uid_position, string_length, generateRandomUID());
         std::cout << "new line: " << line << '\n';
