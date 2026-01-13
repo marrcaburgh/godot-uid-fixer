@@ -1,5 +1,5 @@
 # godot-uid-fixer
-Fixes the UID error in godot (only in current directory)
+Fixes the UID error in godot
 
 # Known issues
 Sometimes inserts '@^' into the string, causing the uid to be unusable. (Fixed)
