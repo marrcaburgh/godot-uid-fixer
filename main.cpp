@@ -132,7 +132,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    std::cout << "Done!\n";
+    std::cout << "done.\n";
 
     return 0;
 }
