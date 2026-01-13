@@ -5,6 +5,7 @@
 #include <random>
 #include <dirent.h>
 
+const double VERSION = 1.2;
 const std::string CHARACTER_SET {
         "abcdefghijklmnopqrstuvwxyz"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -79,13 +80,14 @@ bool handleFile(struct dirent* ent) {
 }
 
 int main() {
+    std::cout << "godot-uid-fixer v" << VERSION << '\n';
     DIR* directory { opendir(".") };
 
     if (!directory) {
         std::cerr << "ERROR: Unable to open current directory! (Maybe invalid read/write permissions?)\n";
         return -1;
     }
-
+    
     std::cout << "Randomizing UIDs of all godot resources in current directory...\n";
 
     struct dirent* ent {};
