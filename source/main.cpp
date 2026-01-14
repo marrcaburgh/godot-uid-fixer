@@ -10,10 +10,12 @@
 enum ReturnCode { FILE_OPEN_FAILED = -1, SUCCESS = 0 };
 
 const double VERSION{1.4};
-const int RELEASE{1};
+const int RELEASE{3};
 const std::string CHARACTER_SET{"abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 "0123456789"};
+const std::string SUPPORTED_FILE_EXTENSIONS[10]{".uid",  ".tres", ".tres",
+                                                ".tscn", ".scn",  ".import"};
 const int UID_LENGTH{12};
 
 bool recursive{false};
@@ -113,8 +115,10 @@ bool handleFile(std::filesystem::path file_path) {
 
 // Checks if the file extension is valid.
 bool checkFileExtension(std::filesystem::path file_path) {
-  if (file_path.extension() == ".tres") {
-    return true;
+  for (std::string file_extension : SUPPORTED_FILE_EXTENSIONS) {
+    if (file_path.extension() == file_extension) {
+      file_paths.push_back(file_path);
+    }
   }
 
   return false;
