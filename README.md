@@ -1,17 +1,13 @@
 # godot-uid-fixer
-Fixes the UID error in godot by randomizing the UIDs in a file.
-
+Fixes the UID error in godot by randomizing the UIDs in a file.</br>
 ## Build instructions
 ### Prerequisites
-CMake
-
-C++ Compiler
-
+CMake</br>
+C++ Compiler</br>
 ### Building
-`cd` to root directory of repo.</br>
+`cd` to the root directory of the repo.</br>
 Run `cmake .`</br>
 Run `make`.</br>
-
 ## Installation instructions
 ### Arch Linux
-Install [godot-uid-fixer-git](https://aur.archlinux.org/packages/godot-uid-fixer-git) from the AUR.
+Download and install [godot-uid-fixer-git](https://aur.archlinux.org/packages/godot-uid-fixer-git) from the AUR.
