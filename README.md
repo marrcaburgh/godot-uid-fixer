@@ -14,4 +14,4 @@ Run `cmake .`
 Run `make`.
 
 ## Installation instructions
-Arch Linux: download and install [godot-uid-fixer-git from the AUR] (https://aur.archlinux.org/packages/godot-uid-fixer-git)
+Arch Linux: download and install [godot-uid-fixer-git] (https://aur.archlinux.org/packages/godot-uid-fixer-git)
