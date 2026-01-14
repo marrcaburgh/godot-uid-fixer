@@ -3,7 +3,7 @@ Fixes the UID error in godot by randomizing the UIDs in a file.</br>
 ## Build instructions
 ### Prerequisites
 CMake</br>
-C++ Compiler</br>
+C++ Compiler such as gcc or clangd</br>
 ### Building
 `cd` to the root directory of the repo.</br>
 Run `cmake .`</br>
