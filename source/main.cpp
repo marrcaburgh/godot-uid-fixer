@@ -14,7 +14,7 @@ const int RELEASE{3};
 const std::string CHARACTER_SET{"abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 "0123456789"};
-const std::string SUPPORTED_FILE_EXTENSIONS[10]{".uid",  ".tres", ".tres",
+const std::string SUPPORTED_FILE_EXTENSIONS[6]{".uid",  ".tres", ".tres",
                                                 ".tscn", ".scn",  ".import"};
 const int UID_LENGTH{12};
 
