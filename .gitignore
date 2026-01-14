@@ -1,8 +1,8 @@
 *
 !source/
 !source/**
-!includes/
-!includes/**
+!include/
+!include/**
 !CMakeLists.txt
 !LICENSE
 !README.md
