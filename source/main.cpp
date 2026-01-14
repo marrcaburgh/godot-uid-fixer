@@ -7,19 +7,25 @@
 #include <string>
 #include <vector>
 
-enum ReturnCode { FILE_OPEN_FAILED = -1, SUCCESS = 0 };
+const int8_t VERSION_MAJOR{1};
+const int8_t VERSION_MINOR{5};
+const int8_t RELEASE{1};
 
-const double VERSION{1.4};
-const int RELEASE{3};
+// Return codes
+const int8_t SUCCESS{0};
+const int8_t FILE_OPEN_FAILED{-1};
+
+const int8_t UID_LENGTH{12};
+
 const std::string CHARACTER_SET{"abcdefghijklmnopqrstuvwxyz"
                                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 "0123456789"};
 const std::string SUPPORTED_FILE_EXTENSIONS[6]{".uid",  ".tres", ".tres",
-                                                ".tscn", ".scn",  ".import"};
-const int UID_LENGTH{12};
+                                               ".tscn", ".scn",  ".import"};
 
 bool recursive{false};
 bool verbose{false};
+
 std::vector<std::filesystem::path> file_paths{};
 
 /*
@@ -43,8 +49,8 @@ std::string generateRandomUID() {
 }
 
 // Prints unable to open file error message.
-void printFileErrorMessage(std::string file_path) {
-  std::cout << "ERROR: Unable to open file: " << file_path
+void printFileErrorMessage(const std::filesystem::path &file_path) {
+  std::cout << "ERROR: Unable to open file: " << file_path.string()
             << "(Maybe invalid read/write permissions?)\n";
 }
 
@@ -54,12 +60,12 @@ file, then removes the old file and renames temporary file to the
 name of the old file. If a UID is found within a line, replaces it with a new
 UID using generateRandomUID then writes the line.
 */
-bool handleFile(std::filesystem::path file_path) {
+bool handleFile(const std::filesystem::path &file_path) {
   std::cout << "File: " << file_path.string() << '\n';
   std::ifstream input_file_stream(file_path);
 
   if (!input_file_stream.is_open()) {
-    printFileErrorMessage(file_path.string());
+    printFileErrorMessage(file_path);
 
     return false;
   }
@@ -68,7 +74,7 @@ bool handleFile(std::filesystem::path file_path) {
   std::ofstream output_file_stream(tempfile_path);
 
   if (!output_file_stream.is_open()) {
-    printFileErrorMessage(file_path.string());
+    printFileErrorMessage(file_path);
 
     return false;
   }
@@ -85,8 +91,12 @@ bool handleFile(std::filesystem::path file_path) {
       continue;
     }
 
+    // start of actual UID
     uid_position += 7;
+
+    // end of actual UID
     size_t endquote_position{line.find('"', uid_position)};
+
     std::string new_uid{generateRandomUID()};
 
     if (verbose) {
@@ -96,6 +106,7 @@ bool handleFile(std::filesystem::path file_path) {
                 << " | New UID: " << new_uid << "]\n";
     }
 
+    // replace as many characters as the actual UID
     line.replace(uid_position, endquote_position - uid_position, new_uid);
 
     output_file_stream << line << '\n';
@@ -113,11 +124,13 @@ bool handleFile(std::filesystem::path file_path) {
   return true;
 }
 
-// Checks if the file extension is valid.
-bool checkFileExtension(std::filesystem::path file_path) {
+/*
+Checks if the file extension is valid.
+*/
+bool checkFileExtension(const std::filesystem::path &file_path) {
   for (std::string file_extension : SUPPORTED_FILE_EXTENSIONS) {
-    if (file_path.extension() == file_extension) {
-      file_paths.push_back(file_path);
+    if (file_path.extension().string() == file_extension) {
+      return true;
     }
   }
 
@@ -138,24 +151,36 @@ void handleDirectoryEntry(const std::filesystem::directory_entry &entry) {
   }
 }
 
+void printRandomizingMessage(bool files = false) {
+  if (files) {
+    std::cout << "Randomizing UIDS of all godot file(s) listed";
+  } else {
+    std::cout << "Randomizing UIDS of all godot files in current directory";
+
+    if (recursive) {
+      std::cout << " and all subdirectories";
+    }
+  }
+
+  std::cout << "...\n";
+}
+
 /*
 Iterates through a directory and if recursive iteration is enabled, its
 subdirectories.
 */
 void randomizeDirectory() {
-  if (recursive) {
-    std::cout << "Randomizing UIDs of all godot resources in current "
-              << "directory and all subdirectories...\n";
+  printRandomizingMessage();
 
+  if (recursive) {
     std::filesystem::recursive_directory_iterator directory_iterator(".");
+
     for (const std::filesystem::directory_entry &entry : directory_iterator) {
       handleDirectoryEntry(entry);
     }
   } else {
-    std::cout << "Randomizing UIDs of all godot resources in current "
-              << "directory...\n";
-
     std::filesystem::directory_iterator directory_iterator(".");
+
     for (const std::filesystem::directory_entry &entry : directory_iterator) {
       handleDirectoryEntry(entry);
     }
@@ -169,6 +194,8 @@ If directory iteration is enabled first calls randomizeDirectory.
 bool randomize(bool directory = true) {
   if (directory) {
     randomizeDirectory();
+  } else {
+    printRandomizingMessage(true);
   }
 
   for (const std::filesystem::path &file_path : file_paths) {
@@ -196,7 +223,8 @@ int main(int argc, char **argv) {
   argv = app.ensure_utf8(argv);
   CLI11_PARSE(app, argc, argv);
 
-  std::cout << "godot-uid-fixer v" << VERSION << "-" << RELEASE << "\n\n";
+  std::cout << "godot-uid-fixer v" << VERSION_MAJOR << "." << VERSION_MINOR
+            << "-" << RELEASE << "\n\n";
 
   if (!randomize(file_paths.empty())) {
     return FILE_OPEN_FAILED;
