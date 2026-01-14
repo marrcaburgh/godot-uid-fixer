@@ -9,16 +9,17 @@
 
 const int8_t VERSION_MAJOR{1};
 const int8_t VERSION_MINOR{5};
-const int8_t RELEASE{2};
+const int8_t RELEASE{3};
 
 // Return codes
 const int8_t SUCCESS{0};
 const int8_t FILE_OPEN_FAILED{-1};
 
 const int8_t UID_LENGTH{12};
+const int8_t UID_OFFSET{6};
 
 const std::string CHARACTER_SET{"abcdefghijklmnopqrstuvwxyz0123456789"};
-const std::string SUPPORTED_FILE_EXTENSIONS[6]{".uid",  ".tres", ".tres",
+const std::string SUPPORTED_FILE_EXTENSIONS[6]{".uid",  ".tres", ".res",
                                                ".tscn", ".scn",  ".import"};
 
 bool recursive{false};
@@ -81,7 +82,7 @@ bool handleFile(const std::filesystem::path &file_path) {
   int line_count{};
 
   while (std::getline(input_file_stream, line)) {
-    size_t uid_position{line.find("\"uid://")};
+    size_t uid_position{line.find("uid://")};
 
     if (uid_position == std::string::npos) {
       output_file_stream << line << '\n';
@@ -90,7 +91,7 @@ bool handleFile(const std::filesystem::path &file_path) {
     }
 
     // start of actual UID
-    uid_position += 7;
+    uid_position += UID_OFFSET;
 
     // end of actual UID
     size_t endquote_position{line.find('"', uid_position)};
@@ -99,8 +100,7 @@ bool handleFile(const std::filesystem::path &file_path) {
 
     if (verbose) {
       std::cout << "Replacing line: " << line << '\n';
-      std::cout << "[UID: "
-                << line.substr(uid_position, endquote_position - uid_position)
+      std::cout << "[UID: " << line.substr(uid_position, UID_LENGTH)
                 << " | New UID: " << new_uid << "]\n";
     }
 
