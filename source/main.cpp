@@ -9,7 +9,7 @@
 
 const int8_t VERSION_MAJOR{1};
 const int8_t VERSION_MINOR{5};
-const int8_t RELEASE{1};
+const int8_t RELEASE{2};
 
 // Return codes
 const int8_t SUCCESS{0};
@@ -17,9 +17,7 @@ const int8_t FILE_OPEN_FAILED{-1};
 
 const int8_t UID_LENGTH{12};
 
-const std::string CHARACTER_SET{"abcdefghijklmnopqrstuvwxyz"
-                                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                "0123456789"};
+const std::string CHARACTER_SET{"abcdefghijklmnopqrstuvwxyz0123456789"};
 const std::string SUPPORTED_FILE_EXTENSIONS[6]{".uid",  ".tres", ".tres",
                                                ".tscn", ".scn",  ".import"};
 
